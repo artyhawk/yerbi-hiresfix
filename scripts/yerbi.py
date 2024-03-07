@@ -7,14 +7,14 @@ import gradio as gr
 
 CONFIG_PATH = Path(__file__).parent.resolve() / '../config.yaml'
 
-class AdaptiveScaler(nn.Module):
+class AdaptiveScaler(torch.nn.Module):
     def __init__(self, upscale_model, output_channels):
         super().__init__()
         self.upscale_model = upscale_model
         # Ensuring the output has the correct number of channels
         self.adjust_channels = nn.Conv2d(in_channels=output_channels, out_channels=output_channels, kernel_size=1)
 
-    def forward(self, x):
+    def forward(self, x, *args, **kwargs):
         x = self.upscale_model(x)
         x = self.adjust_channels(x)
         return x
